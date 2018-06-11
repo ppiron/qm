@@ -8,7 +8,7 @@ function makeRequest() {
   //       "Content-type": "application/x-www-form-urlencoded"
   //     },
   //   })
-  fetch('http://quotes.stormconsultancy.co.uk/random.json/')
+  return fetch('http://quotes.stormconsultancy.co.uk/random.json/')
     .then( (response) => {
       //console.log(response);
       return response.json();
@@ -16,4 +16,4 @@ function makeRequest() {
     
 } 
 
-makeRequest()
+makeRequest().then(data => console.log(data));

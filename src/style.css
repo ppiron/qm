@@ -1,5 +1,56 @@
-* {
+html, body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: 'Sunflower', sans-serif;
+  color: #2a2a2a;
+}
+
+#quote-box {
+  width: 500px;
+  height: 180px;
+  overflow: hidden;
+  margin: 0 auto;
+  margin-top: 200px;
+  padding: 20px;
+  border-radius: 5px;
+  transition-duration: 850ms;
+  position: relative;
+}
+
+#text, #author {
+  margin-bottom: 10px;
+}
+
+#author {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.buttons {
+  position: absolute;
+  bottom: 20px;
+}
+
+#new-quote, #tweet-quote {
+  width: 130px;
+  height: 30px;
+  /* border: 1px solid lightblue; */
+  border-radius: 5px;
+  cursor: pointer;
+  display: inline-block;
+  text-align: center;
+  line-height: 30px;
+  margin-top: 20px;
+  background-color: blue;
+  color: whitesmoke;
+}
+
+#new-quote {
+  margin-left: 150px;
+}
+
+#tweet-quote {
+  text-decoration:none;
+  margin-left: 20px;
 }

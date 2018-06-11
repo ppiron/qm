@@ -850,6 +850,10 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+// import Transition from 'react-transition-group/Transition'
+
+var colorList = ['#DAD7DE', '#A08FB6', '#B9ADC9', '#AAA5B1', '#96909E', '#F5ECEF', '#E8B2C2', '#EECBD5', '#E7D6DB', '#D2BDC3', '#EEF3EB', '#C7E5B0', '#D8ECC9', '#DAE4D3', '#C3CFBB', '#FFFEF6', '#FFFAC4', '#FFFCD9', '#FFFDEC', '#E9E7D3'];
+
 function makeRequest() {
   var request = new Request('http://quotes.stormconsultancy.co.uk/random.json/', {
     method: 'GET',
@@ -857,12 +861,33 @@ function makeRequest() {
       "Content-type": "application/x-www-form-urlencoded"
     }
   });
-  fetch(request).then(function (response) {
-    console.log(response.json());
+  return fetch(request).then(function (response) {
     return response.json();
-  }).then(function (data) {
-    return data;
   });
+}
+
+function fade(elt, duration, mode) {
+  var start = null;
+  var progress = void 0;
+
+  function step(time, elt, duration, mode) {
+    if (!start) start = time;
+    progress = time - start;
+    elt.style.opacity = mode === 'out' ? 1 - progress / duration : progress / duration;
+    if (progress < duration) {
+      window.requestAnimationFrame(function (time) {
+        return step(time, elt, duration, mode);
+      });
+    } else {
+      start = null;
+    }
+  }
+  function bar() {
+    window.requestAnimationFrame(function (time) {
+      return step(time, elt, duration, mode);
+    });
+  }
+  return bar;
 }
 
 var App = function (_Component) {
@@ -876,7 +901,9 @@ var App = function (_Component) {
     _this.state = {
       isLoading: true,
       quote: '',
-      author: ''
+      author: '',
+      bgColor: colorList[Math.floor(Math.random() * 20)]
+      // in: true,
     };
 
     _this.handleClick = _this.handleClick.bind(_this);
@@ -884,32 +911,87 @@ var App = function (_Component) {
   }
 
   _createClass(App, [{
-    key: 'handleClick',
-    value: function handleClick(event) {}
-  }, {
     key: 'componentDidMount',
     value: function componentDidMount() {
       var _this2 = this;
 
-      makeRequest().then(function (data) {
-        _this2.setState(function (prevState) {
-          return {
-            isLoading: false,
-            quote: data.quote,
-            author: data.author
-          };
+      var box = document.getElementById('quote-box');
+      box.style.backgroundColor = this.state.bgColor;
+      window.setTimeout(function () {
+        makeRequest().then(function (data) {
+          _this2.setState(function (prevState) {
+            return {
+              isLoading: false,
+              quote: data.quote,
+              author: data.author,
+              bgColor: colorList[Math.floor(Math.random() * 20)]
+            };
+          }, function () {
+            var el = document.getElementById('quot');
+            fade(el, 800, 'in')();
+            var box = document.getElementById('quote-box');
+            box.style.backgroundColor = _this2.state.bgColor;
+          });
         });
-      });
+      }, 50);
+    }
+  }, {
+    key: 'handleClick',
+    value: function handleClick(event) {
+      var _this3 = this;
+
+      var el = document.getElementById('quot');
+      fade(el, 200, 'out')();
+      window.setTimeout(function () {
+        makeRequest().then(function (data) {
+          console.log(data);
+          _this3.setState(function (prevState) {
+            return {
+              isLoading: false,
+              quote: data.quote,
+              author: data.author,
+              bgColor: colorList[Math.floor(Math.random() * 20)]
+              // in: true,
+            };
+          }, fade(el, 800, 'in')());
+        });
+      }, 200);
     }
   }, {
     key: 'render',
     value: function render() {
 
+      var styles = {
+        backgroundColor: this.state.bgColor
+      };
+
       if (this.state.isLoading) {
         return _react2.default.createElement(
           'div',
-          { id: 'quote-box' },
-          'Loading...'
+          null,
+          _react2.default.createElement(
+            'div',
+            { id: 'quote-box' },
+            'Loading...',
+            _react2.default.createElement(
+              'div',
+              { id: 'quot' },
+              _react2.default.createElement(
+                'div',
+                { id: 'text', className: 'quote' },
+                _react2.default.createElement(
+                  'span',
+                  null,
+                  this.state.quote
+                )
+              ),
+              _react2.default.createElement(
+                'div',
+                { id: 'author', className: 'quote' },
+                this.state.author
+              )
+            )
+          )
         );
       }
 
@@ -917,32 +999,43 @@ var App = function (_Component) {
         'div',
         null,
         _react2.default.createElement(
-          'p',
-          null,
-          'Start editing to see some magic happen :)'
-        ),
-        _react2.default.createElement(
           'div',
-          { id: 'quote-box' },
+          { style: styles, id: 'quote-box' },
           _react2.default.createElement(
             'div',
-            { id: 'text' },
-            this.state.quote
+            { id: 'quot' },
+            _react2.default.createElement(
+              'div',
+              { id: 'text', className: 'quote' },
+              _react2.default.createElement(
+                'span',
+                null,
+                '"',
+                this.state.quote,
+                '"'
+              )
+            ),
+            _react2.default.createElement(
+              'div',
+              { id: 'author', className: 'quote' },
+              '- ',
+              this.state.author
+            )
           ),
           _react2.default.createElement(
             'div',
-            { id: 'author' },
-            this.state.author
-          ),
-          _react2.default.createElement(
-            'div',
-            { id: 'new-quote', onClick: this.handleClick },
-            'New Quote'
-          ),
-          _react2.default.createElement(
-            'div',
-            { id: 'tweet-quote' },
-            'Tweet This Quote'
+            { className: 'buttons' },
+            _react2.default.createElement(
+              'div',
+              { id: 'new-quote', onClick: this.handleClick },
+              'New Quote'
+            ),
+            _react2.default.createElement(
+              'a',
+              { href: 'https://twitter.com/intent/tweet?text=' + this.state.quote, id: 'tweet-quote',
+                className: 'twitter-share-button', target: '_blank' },
+              'Tweet This Quote'
+            )
           )
         )
       );
