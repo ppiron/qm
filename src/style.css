@@ -13,7 +13,8 @@ html, body {
   margin: 0 auto;
   margin-top: 200px;
   padding: 20px;
-  border-radius: 5px;
+  padding-top: 40px;
+  border-radius: 1px;
   transition-duration: 850ms;
   position: relative;
 }
@@ -21,7 +22,25 @@ html, body {
 #text, #author {
   margin-bottom: 10px;
 }
-
+#text {
+  line-height: 25x;
+  vertical-align: bottom;
+}
+#text::first-letter {
+  display: inline-block;
+  font-family: 'Arapey', serif;
+  font-size: 64px;
+  margin-right: 6px;
+  line-height: 25px;
+}
+/* #text::before {
+  content: '“';
+  display: inline-block;
+  font-family: 'Arapey', serif;
+  font-size: 64px;
+  margin-right: 6px;
+  line-height: 25px;
+} */
 #author {
   font-weight: bold;
   font-size: 14px;

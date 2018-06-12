@@ -148,7 +148,7 @@ class App extends Component {
         <div style={styles} id='quote-box'>
             <div id='quot'>
               <div id='text' className='quote'>
-                <span>"{this.state.quote}"</ span>
+                <span>{this.state.quote}</ span>
               </div>
               <div id='author' className='quote'>- {this.state.author}</div>
             </div>

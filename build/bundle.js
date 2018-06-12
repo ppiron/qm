@@ -1010,9 +1010,7 @@ var App = function (_Component) {
               _react2.default.createElement(
                 'span',
                 null,
-                '"',
-                this.state.quote,
-                '"'
+                this.state.quote
               )
             ),
             _react2.default.createElement(
